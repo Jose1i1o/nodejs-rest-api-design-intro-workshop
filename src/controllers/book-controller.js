@@ -1,5 +1,7 @@
 const db = require("../models");
-const { logger } = require("../config/config");
+const {
+  logger
+} = require("../config/config");
 
 /**
  * 1. Create the book CRUD controllers
@@ -36,7 +38,14 @@ const { logger } = require("../config/config");
  * with the error object that is caught
  */
 async function createBook(req, res, next) {
-  const { title, author, genre, year, pages } = req.body;
+
+  const {
+    title,
+    author,
+    genre,
+    year,
+    pages
+  } = req.body;
 
   try {
     const book = await db.Book.create({
@@ -47,11 +56,11 @@ async function createBook(req, res, next) {
       pages: pages,
     });
 
-    res.status(201).send({
+    res.status(200).send({
       data: book._id,
     });
-  } catch (error) {
-    next(error);
+  } catch (err) {
+    next(err);
   }
 }
 
@@ -72,17 +81,17 @@ async function createBook(req, res, next) {
  *
  * And call lean() and exec() on the query
  */
-async function getBooks(req, res, next) {
-  try {
-    const books = await db.Book.find({}).select({ title: 1 }).lean().exec();
-
-    res.status(200).send({
-      data: books,
-    });
-  } catch (error) {
-    next(error);
-  }
-}
+async function getBooks() {}
+//   try {
+//     const data = req.body;
+//     console.log(data);
+//     res.status(200).send({
+//       // data: data;
+//     })
+//   } catch (err) {
+//     next(err);
+//   }
+// }
 
 /**
  * 1. Create the book CRUD controllers
@@ -116,32 +125,7 @@ async function getBooks(req, res, next) {
  *
  * And call lean() and exec() on the query
  */
-async function getSingleBook(req, res, next) {
-  const { bookId } = req.params;
-
-  try {
-    const book = await db.Book.findOne({ _id: bookId })
-      .select({
-        title: 1,
-        pages: 1,
-      })
-      .populate({
-        path: "author",
-        select: {
-          firstName: 1,
-          lastName: 1,
-        },
-      })
-      .lean()
-      .exec();
-
-    res.status(200).send({
-      data: book,
-    });
-  } catch (error) {
-    next(error);
-  }
-}
+async function getSingleBook() {}
 
 /**
  * 1. Create the book CRUD controllers
@@ -168,29 +152,21 @@ async function getSingleBook(req, res, next) {
  * Wrap the code in a try/catch statement and call next(error)
  * with the error object that is caught
  */
-async function updateBook(req, res, next) {
-  const { bookId } = req.params;
-  const { title, pages } = req.body;
 
-  try {
-    const book = await db.Book.findOneAndUpdate(
-      { _id: bookId },
-      {
-        $set: {
-          title: title,
-          pages: pages,
-        },
-      },
-      { new: true },
-    );
 
-    res.status(200).send({
-      data: book,
-    });
-  } catch (error) {
-    next(error);
-  }
-}
+async function updateBook() {}
+//   try {
+//     const bookId = req.params['bookId'];
+//     const data = req.body;
+
+//     const updatedBook = await db.Book.findByIdAndUpdate(bookId, data);
+//     res.status(200).send({
+//       updatedData: updatedBook
+//     });
+//   } catch (err) {
+//     next(err);
+//   }
+// }
 
 /**
  * 1. Create the book CRUD controllers
@@ -210,19 +186,7 @@ async function updateBook(req, res, next) {
  * Wrap the code in a try/catch statement and call next(error)
  * with the error object that is caught
  */
-async function deleteBook(req, res, next) {
-  const { bookId } = req.params;
-
-  try {
-    const book = await db.Book.findOneAndDelete({ _id: bookId });
-
-    res.status(200).send({
-      data: { _id: book._id },
-    });
-  } catch (error) {
-    next(error);
-  }
-}
+async function deleteBook() {}
 
 module.exports = {
   createBook: createBook,
